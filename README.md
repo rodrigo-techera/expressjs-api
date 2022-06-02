@@ -13,8 +13,10 @@
   - [5. Database Connection Test](#5-database-connection-test)
   - [6. Database Schema](#6-database-schema)
   - [7. Running Server](#7-running-server)
+- [Postman collection](#postman-collection)
 - [Packages Used](#packages-used)
 - [Available endpoints](#available-endpoints)
+- [Users Roles](#user-roles)
 - [TODO List](#todo-list)
 
 ## Tech Stack
@@ -116,6 +118,10 @@ npm run server
 
 Once server is running we will have it available on `localhost` under the port specified on `.env` file:
 localhost:3000
+
+## Postman collection
+
+There is a file in the root folder called `postman-collection-export.json` this could be used to import,inside Postman, a collection to handle every endpoint made by this Rest API
 
 ## Packages Used
 
@@ -346,6 +352,12 @@ None
     "message": "Tutorials were deleted successfully"
 }
 ```
+
+## Users Roles
+
+The users has assigned a Role attribute wich currenlty supports "Admin" or "User" values.
+This role is intended to handle the permissions at the time of create, update or delete resources
+So "User" role can only use `/v1/auth` endpoint to get accessToken and then `/v1/tutorials/` via GET to get tutorials list.
 
 ## TODO List
 
