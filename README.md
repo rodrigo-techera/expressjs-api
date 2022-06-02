@@ -17,11 +17,12 @@
 
 ## Tech Stack
 
-- ExpressJS
-- Sequelize
-- Docker
-- MySQL
-- Postman
+- [ExpressJS](https://expressjs.com/)
+- [Sequelize](https://sequelize.org/)
+- [Docker](https://www.docker.com/)
+- [MySQL](https://www.mysql.com/)
+- [PhpMyAdmin](https://www.phpmyadmin.net/)
+- [Postman](https://www.postman.com/)
 
 ## Installation
 
@@ -48,17 +49,19 @@ MYSQL_USER_PASSWORD => password used on database connection
 MYSQL_DATABASE => database name
 ```
 
-### 3. Database Creation
+### 3. Database Engine
 
-There is a docker-compose.yml file intended to run a container for MySQL, the credentials are being consumed from .env file.
+There is a docker-compose.yml file intended to run a container for MySQL, and PhpMyAdmin as well, credentials for those are being consumed from `.env` file.
 
 To install docker and docker-compose: https://docs.docker.com/compose/install/
 
-After having it run:
+After having it, run the following command:
 
 ```
 docker-compose up -d
 ```
+
+This will be exposing a MySQL database engine over `localhost:3306` and PhpMyAdmin installation on port 8889 so going to a browser accesing to `localhost:8889` we should see PhpMyAdmin UI asking for the credentials used on the `.env` file.
 
 ### 4. Install node packages
 
@@ -108,6 +111,9 @@ There is a script specified in package.json intended to run server.
 ```
 npm run server
 ```
+
+Once server is running we will have it available on `localhost` under the port specified on `.env` file:
+localhost:3000
 
 ## TODO List
 
