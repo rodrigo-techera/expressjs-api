@@ -13,6 +13,7 @@
   - [5. Database Connection Test](#5-database-connection-test)
   - [6. Database Schema](#6-database-schema)
   - [7. Running Server](#7-running-server)
+- [Packages Used](#packages-used)
 - [TODO List](#todo-list)
 
 ## Tech Stack
@@ -115,7 +116,20 @@ npm run server
 Once server is running we will have it available on `localhost` under the port specified on `.env` file:
 localhost:3000
 
+## Packages Used
+
+- `bcrypt` => used to encrypt user password preventing to save plain text on the db
+- `cors` =>
+- `dotenv` => used to extract values from .env file
+- `express` => to handle api routes
+- `express-validator` => to sanitize and validate data as a middleware
+- `jsonwebtoken` to handle json web tokens
+- `mysql2` => mysql driver to handle database connection
+- `sequelize` => ORM tool to handle models and CRUD actions
+
 ## TODO List
 
 - Create endpoints for User Model
 - Integrate Unit Test
+- Create endpoint for Logout
+- Create endpoint for RefreshToken
