@@ -116,19 +116,19 @@ exports.create = (req, res) => {
 
 exports.updateById = (req, res) => {
   const id = req.params.id;
-  const data = {};
+  const newData = {};
 
   // Checking if the keys are present on the request body just to update only the ones are sent
   // Also in this way the data si allowing only those keys preventing other keys being updated
-  if ("title" in req.body) data.title = req.body.title;
-  if ("videoUrl" in req.body) data.videoUrl = req.body.videoUrl;
-  if ("description" in req.body) data.description = req.body.description;
+  if ("title" in req.body) newData.title = req.body.title;
+  if ("videoUrl" in req.body) newData.videoUrl = req.body.videoUrl;
+  if ("description" in req.body) newData.description = req.body.description;
 
   //checking first if tutorial exists to return the correct HTTP status code
   Tutorial.findByPk(id)
     .then((data) => {
       if (data) {
-        Tutorial.update(data, {
+        Tutorial.update(newData, {
           where: { id: id },
         })
           .then((num) => {
@@ -139,7 +139,7 @@ exports.updateById = (req, res) => {
             } else {
               return res.status(500).send({
                 // Server Error
-                error: "An error ocurred while updating Tutorial",
+                error: "Tutorial was not updated",
               });
             }
           })

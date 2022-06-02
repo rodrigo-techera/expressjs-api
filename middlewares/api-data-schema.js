@@ -1,7 +1,8 @@
-const { body, query, validationResult } = require("express-validator");
+const { body, query, check, validationResult } = require("express-validator");
 const {
   customCreateTokenValidationJWT,
 } = require("./custom-create-token-validation");
+const { isValidHttpUrl } = require("../utils/checks");
 
 const ALLOWED_SORT_FIELDS = ["id", "title", "updatedAt"];
 const ALLOWED_SORT_VALUES = ["ASC", "DESC"];
@@ -11,7 +12,6 @@ const validateParams = (req, res, next) => {
 
   if (errors.errors.length > 0) {
     //validation errors ocurred
-    console.log("errors.errors", errors.errors);
     return res.status(400).send({
       //bad Request
       error: errors.errors[0].msg,
@@ -27,17 +27,29 @@ const isAdminRole = (req, res, next) => {
   }
 
   return res.status(401).send({
-    //bad Request
+    //Unauthorized
     error: "invalid role",
   });
 };
 
 exports.authenticateSchema = [
-  body("email").exists().withMessage("email field is required"),
-  body("email").isEmail().withMessage("Invalid email"),
-  body("email").normalizeEmail(),
-  body("password").exists().withMessage("password field is required"),
-  body("password").trim().escape(),
+  check("email").exists().withMessage("email field is required"),
+  check("email").isString().withMessage("email field must be a string"),
+  check("email")
+    .trim()
+    .escape()
+    .not()
+    .isEmpty()
+    .withMessage("email field cannot be empty"),
+  check("email").isEmail().withMessage("Invalid email"),
+  check("password").exists().withMessage("password field is required"),
+  check("password").isString().withMessage("password field must be a string"),
+  check("password")
+    .trim()
+    .escape()
+    .not()
+    .isEmpty()
+    .withMessage("password field cannot be empty"),
   validateParams,
 ];
 
@@ -63,36 +75,82 @@ exports.tutorialsListAllSchema = [
 exports.tutorialsListByIdSchema = [
   isAdminRole,
   //not needed to check if id exists because it is part of the route
-  body("id").not().isNumeric().withMessage("Invalid id"),
+  check("id").trim().isInt().withMessage("id must be a number"),
   validateParams,
 ];
 
 exports.tutorialsCreateSchema = [
   customCreateTokenValidationJWT,
   isAdminRole,
-  body("title").exists().withMessage("title field is required"),
-  body("title").trim().escape(),
-  body("title").not().isEmpty().withMessage("title field cannot be empty"),
-  body("videoUrl")
-    .optional()
+  check("title").isString().withMessage("title field must be a string"),
+  check("title")
+    .trim()
+    .escape()
     .not()
-    .isURL()
-    .withMessage("videoUrl field should be a valid url"),
-  body("description").trim().escape(),
+    .isEmpty()
+    .withMessage("title field cannot be empty"),
+  check("videoUrl")
+    .optional()
+    .trim()
+    .custom((value) => {
+      /*
+      // Looks like validator.isURL has a bug and is not validating well
+      // As alternative, a validator for urls was created to don't waste time debugging validator.isURL
+      return value === ""
+        ? true
+        : validator.not().isURL(value, {
+            protocols: ["http", "https"],
+            allow_underscores: true,
+          });
+      */
+      return value === "" ? true : isValidHttpUrl(value);
+    }) //allow empty value as well
+    .withMessage("videoUrl field must be a valid url"),
+  check("description")
+    .optional()
+    .isString()
+    .withMessage("description field must be a string"),
+  check("description").trim().escape(),
   validateParams,
 ];
 
 exports.tutorialsUpdateByIdSchema = [
   isAdminRole,
   //not needed to check if id exists because it is part of the route
-  body("id").not().isNumeric().withMessage("Invalid id"),
-  body("title").trim().escape(),
-  body("videoUrl")
+  check("id").trim().isInt().withMessage("id must be a number"),
+  check("title")
+    .optional()
+    .isString()
+    .withMessage("title field must be a string"),
+  check("title")
+    .optional()
     .trim()
     .escape()
-    .isURL()
-    .withMessage("videoUrl field should be a valid url"),
-  body("description").trim().escape(),
+    .not()
+    .isEmpty()
+    .withMessage("title field cannot be empty"),
+  check("videoUrl")
+    .optional()
+    .trim()
+    .custom((value) => {
+      /*
+      // Looks like validator.isURL has a bug and is not validating well
+      // As alternative, a validator for urls was created to don't waste time debugging validator.isURL
+      return value === ""
+        ? true
+        : validator.isURL(value, {
+            protocols: ["http", "https"],
+            allow_underscores: true,
+          });
+      */
+      return value === "" ? true : isValidHttpUrl(value);
+    }) //allow empty value as well
+    .withMessage("videoUrl field must be a valid url"),
+  check("description")
+    .optional()
+    .isString()
+    .withMessage("description field must be a string"),
+  check("description").trim().escape(),
   validateParams,
 ];
 
@@ -101,6 +159,6 @@ exports.tutorialsMassDeleteSchema = [isAdminRole];
 exports.tutorialsDeleteByIdSchema = [
   isAdminRole,
   //not needed to check if id exists because it is part of the route
-  body("id").not().isNumeric().withMessage("Invalid id"),
+  check("id").trim().isInt().withMessage("id must be a number"),
   validateParams,
 ];
