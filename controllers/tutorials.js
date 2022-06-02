@@ -92,7 +92,7 @@ exports.create = (req, res) => {
   // Save Tutorial in the database
   Tutorial.create(data)
     .then((data) => {
-      res.send(data);
+      res.status(statusCodes.CREATED).send(data);
     })
     .catch((err) => {
       return res.status(statusCodes.INTERNAL_SERVER_ERROR).send({
@@ -189,7 +189,10 @@ exports.deleteById = (req, res) => {
 };
 
 exports.deleteAll = (req, res) => {
-  Tutorial.update({ publishedStatus: "deleted" }, { where: {} })
+  Tutorial.update(
+    { publishedStatus: "deleted", deletedAt: new Date() },
+    { where: {} }
+  )
     .then((num) => {
       if (num >= 1) {
         res.send({
