@@ -14,6 +14,7 @@
   - [6. Database Schema](#6-database-schema)
   - [7. Running Server](#7-running-server)
 - [Packages Used](#packages-used)
+- [Available endpoints](#available-endpoints)
 - [TODO List](#todo-list)
 
 ## Tech Stack
@@ -127,9 +128,229 @@ localhost:3000
 - `mysql2` => mysql driver to handle database connection
 - `sequelize` => ORM tool to handle models and CRUD actions
 
+## Available endpoints
+
+**Authenticate User** `POST /v1/auth`
+**_Payload_**
+
+|       Name | Required |  Type  | Description                  |
+| ---------: | :------: | :----: | ---------------------------- |
+|    `email` | required | string | email credential for user    |
+| `password` | required | string | password credential for user |
+
+**_Response_**
+
+```
+{
+    "accessToken": "eyJhbGci5cCI6IkpXVCJ9.eyJlbWFpbCI6InRIjoiQWRtaW4iLCJpYXQiOjE2NTQxMjc5MzIsImV4cCI6MTY1NDEyOTEzMn0.K7iEVG0f-PZPuaZdptWBGJ5rhfDs"
+}
+```
+
+**Request Creation Token** `GET /v1/tutorials/token`
+**_Headers_**
+
+|            Name | Required |  Type  |          Value          | Description                                |
+| --------------: | :------: | :----: | :---------------------: | :----------------------------------------- |
+| `Authorization` | required | string | `Bearer ${accessToken}` | valid accessToken obtained from `/v1/auth` |
+
+**_Payload_**
+
+None
+
+**_Response_**
+
+```
+{
+    "createAuthenticationToken": "eyJhbGciOipXVCJ9.eyJlbWFpbCI6InRvbnkuc3RhcmtAZXhhNTQxMjc5NDg2NDMsImlhdCI6MTY1NDEyNzk0OCwiZXhwIjoxNjU0MTI4MjQ4fQ.wxjeeVowQPk3sxuEnt26BQo0K0"
+}
+```
+
+**Create Tutorial** `POST /v1/tutorials/`
+
+**_Headers_**
+
+|                          Name | Required |  Type  |             Value              | Description                                           |
+| ----------------------------: | :------: | :----: | :----------------------------: | :---------------------------------------------------- |
+|               `Authorization` | required | string |    `Bearer ${accessToken}`     | valid accessToken obtained from `/v1/auth`            |
+| `custom-authentication-token` | required | string | `${createAuthenticationToken}` | valid accessToken obtained from `/v1/tutorials/token` |
+
+**_Payload_**
+
+|          Name | Required |  Type  | Description                 |
+| ------------: | :------: | :----: | --------------------------- |
+|       `title` | required | string | name for the tutorial       |
+|    `videoUrl` | optional | string | valid url for youtube video |
+| `description` | optional | string | description for tutorial    |
+
+**_Response_**
+
+```
+{
+    "publishedStatus": "published",
+    "id": 9,
+    "title": "Title 16",
+    "videoUrl": null,
+    "description": null,
+    "updatedAt": "2022-06-02T03:07:56.391Z",
+    "createdAt": "2022-06-02T03:07:56.391Z"
+}
+```
+
+**List Tutorials** `GET /v1/tutorials/`
+
+**_Headers_**
+
+|            Name | Required |  Type  |          Value          | Description                                |
+| --------------: | :------: | :----: | :---------------------: | :----------------------------------------- |
+| `Authorization` | required | string | `Bearer ${accessToken}` | valid accessToken obtained from `/v1/auth` |
+
+**_Query String_**
+
+|                    Name | Required |  Type  |                Value                | Description                     |
+| ----------------------: | :------: | :----: | :---------------------------------: | :------------------------------ |
+|         `sort_by_field` | optional | string | one of ['id', 'title', 'updatedAt'] | sort field to apply             |
+|               `sort_by` | optional | string |       one of ['ASC', 'DESC']        | ASC or DESC order               |
+|       `filter_by_title` | optional | string |                                     | string to filter by title       |
+| `filter_by_description` | optional | string |                                     | string to filter by description |
+
+**_Payload_**
+
+None
+
+**_Response_**
+
+```
+[
+    {
+        "id": 1,
+        "title": "Title 1",
+        "videoUrl": null,
+        "description": null,
+        "publishedStatus": "published",
+        "deletedAt": null,
+        "createdAt": "2022-06-01T19:58:03.000Z",
+        "updatedAt": "2022-06-01T19:58:03.000Z"
+    },
+    {
+        "id": 2,
+        "title": "Title 2",
+        "videoUrl": null,
+        "description": null,
+        "publishedStatus": "published",
+        "deletedAt": null,
+        "createdAt": "2022-06-01T19:58:52.000Z",
+        "updatedAt": "2022-06-01T19:58:52.000Z"
+    },
+    {
+        "id": 3,
+        "title": "Title 5",
+        "videoUrl": null,
+        "description": null,
+        "publishedStatus": "published",
+        "deletedAt": null,
+        "createdAt": "2022-06-01T19:58:56.000Z",
+        "updatedAt": "2022-06-01T19:58:56.000Z"
+    }
+]
+```
+
+**List Tutorial by Id** `GET /v1/tutorials/:id`
+
+**_Headers_**
+
+|            Name | Required |  Type  |          Value          | Description                                |
+| --------------: | :------: | :----: | :---------------------: | :----------------------------------------- |
+| `Authorization` | required | string | `Bearer ${accessToken}` | valid accessToken obtained from `/v1/auth` |
+
+**_Payload_**
+
+None
+
+**_Response_**
+
+```
+{
+    "id": 2,
+    "title": "Title 2",
+    "videoUrl": null,
+    "description": null,
+    "publishedStatus": "published",
+    "deletedAt": null,
+    "createdAt": "2022-06-01T19:58:52.000Z",
+    "updatedAt": "2022-06-01T19:58:52.000Z"
+}
+```
+
+**Logic Delete Tutorial by Id** `DELETE /v1/tutorials/:id`
+
+**_Headers_**
+
+|            Name | Required |  Type  |          Value          | Description                                |
+| --------------: | :------: | :----: | :---------------------: | :----------------------------------------- |
+| `Authorization` | required | string | `Bearer ${accessToken}` | valid accessToken obtained from `/v1/auth` |
+
+**_Payload_**
+
+None
+
+**_Response_**
+
+```
+{
+    "message": "Tutorial was deleted successfully"
+}
+```
+
+**Update Tutorial by Id** `PUT /v1/tutorials/:id`
+
+**_Headers_**
+
+|            Name | Required |  Type  |          Value          | Description                                |
+| --------------: | :------: | :----: | :---------------------: | :----------------------------------------- |
+| `Authorization` | required | string | `Bearer ${accessToken}` | valid accessToken obtained from `/v1/auth` |
+
+**_Payload_**
+
+|          Name | Required |  Type  | Description                 |
+| ------------: | :------: | :----: | --------------------------- |
+|       `title` | required | string | name for the tutorial       |
+|    `videoUrl` | optional | string | valid url for youtube video |
+| `description` | optional | string | description for tutorial    |
+
+**_Response_**
+
+```
+{
+    "message": "Tutorial was updated successfully"
+}
+```
+
+**Logic Mass Delete Tutorials** `DELETE /v1/tutorials/mass_delete`
+
+**_Headers_**
+
+|            Name | Required |  Type  |          Value          | Description                                |
+| --------------: | :------: | :----: | :---------------------: | :----------------------------------------- |
+| `Authorization` | required | string | `Bearer ${accessToken}` | valid accessToken obtained from `/v1/auth` |
+
+**_Payload_**
+
+None
+
+**_Response_**
+
+```
+{
+    "message": "Tutorials were deleted successfully"
+}
+```
+
 ## TODO List
 
 - Create endpoints for User Model
 - Integrate Unit Test
 - Create endpoint for Logout
 - Create endpoint for RefreshToken
+- Implement better logging
+- Handle db migrations and initial data from sequelize cli
+- Create configuration for different environments such as dev, staging, prod

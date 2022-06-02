@@ -18,10 +18,11 @@ exports.customCreateTokenValidationJWT = (req, res, next) => {
 
         //verification of timestamp is not needed since that that token expiration is 5m already
         //due to exam instructions we need to check it anyways
-        const timeDiff = 5 * 60; //5 minutes
+        const allowedTimeDiff = 5 * 60 * 1000; //5 minutes in millis
         const currentTimestamp = Date.now();
         const tokenTimestamp = user.timestamp;
-        if (currentTimestamp - tokenTimestamp > timeDiff) {
+
+        if (currentTimestamp - tokenTimestamp > allowedTimeDiff) {
           return res.status(401).send({
             //Unauthorized
             error: "Creation Token expired",
