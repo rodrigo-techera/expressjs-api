@@ -18,6 +18,15 @@ app.use(cors());
 app.use(express.json());
 app.use("/v1", router);
 
+//catch all errors coming from middlewares and routes to serve those with status code
+app.use((err, req, res, next) => {
+  if (err instanceof SyntaxError) {
+    console.error(err);
+    return res.status(err.status).send({ message: err.message });
+  }
+  next();
+});
+
 //catch all wildcard to handle 404 on not found resources
 app.all("*", function (req, res) {
   return res.status(404).send({
