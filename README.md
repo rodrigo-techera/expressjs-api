@@ -16,7 +16,7 @@
 - [Postman collection](#postman-collection)
 - [Packages Used](#packages-used)
 - [Available endpoints](#available-endpoints)
-- [Users Roles](#user-roles)
+- [User Roles](#user-roles)
 - [TODO List](#todo-list)
 
 ## Tech Stack
@@ -353,7 +353,7 @@ None
 }
 ```
 
-## Users Roles
+## User Roles
 
 The users has assigned a Role attribute wich currenlty supports "Admin" or "User" values.
 This role is intended to handle the permissions at the time of create, update or delete resources
