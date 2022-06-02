@@ -63,7 +63,12 @@ exports.listAll = (req, res) => {
 exports.listById = (req, res) => {
   const id = req.params.id;
 
-  Tutorial.findByPk(id)
+  let conditions = {
+    id: id,
+    publishedStatus: "published",
+  };
+
+  Tutorial.findOne({ where: conditions })
     .then((data) => {
       if (data) {
         res.send(data);
@@ -111,8 +116,13 @@ exports.updateById = (req, res) => {
   if ("videoUrl" in req.body) newData.videoUrl = req.body.videoUrl;
   if ("description" in req.body) newData.description = req.body.description;
 
+  let conditions = {
+    id: id,
+    publishedStatus: "published",
+  };
+
   //checking first if tutorial exists to return the correct HTTP status code
-  Tutorial.findByPk(id)
+  Tutorial.findOne({ where: conditions })
     .then((data) => {
       if (data) {
         Tutorial.update(newData, {
@@ -150,8 +160,13 @@ exports.updateById = (req, res) => {
 exports.deleteById = (req, res) => {
   const id = req.params.id;
 
+  let conditions = {
+    id: id,
+    publishedStatus: "published",
+  };
+
   //checking first if tutorial exists to return the correct HTTP status code
-  Tutorial.findByPk(id)
+  Tutorial.findOne({ where: conditions })
     .then((data) => {
       if (data) {
         //Just logical delete by changing the attribute "publishedStatus" to "deleted"
