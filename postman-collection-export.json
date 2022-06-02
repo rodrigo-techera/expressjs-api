@@ -1,0 +1,496 @@
+{
+	"info": {
+		"_postman_id": "6f43e152-4b49-4e27-845c-a7864f7cc8cb",
+		"name": "expressjs-api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "auth",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"pm.environment.set(\"Authorization\", jsonData.accessToken);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {},
+				"strictSSL": false
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"tony.stark@example.com\",\n    \"password\": \"tonyTest!\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{ServerUrl}}/v1/auth/",
+					"host": [
+						"{{ServerUrl}}"
+					],
+					"path": [
+						"v1",
+						"auth",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "createToken",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"pm.environment.set(\"CreateToken\", jsonData.createAuthenticationToken);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {},
+				"strictSSL": false
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Authorization}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{ServerUrl}}/v1/tutorials/token",
+					"host": [
+						"{{ServerUrl}}"
+					],
+					"path": [
+						"v1",
+						"tutorials",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "createTutorial",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {},
+				"strictSSL": false
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Authorization}}",
+						"type": "text"
+					},
+					{
+						"key": "custom-authentication-token",
+						"value": "{{CreateToken}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\": \"Tutorial for challenge video\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{ServerUrl}}/v1/tutorials/",
+					"host": [
+						"{{ServerUrl}}"
+					],
+					"path": [
+						"v1",
+						"tutorials",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "findTutorialById",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {},
+				"strictSSL": false
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Authorization}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{ServerUrl}}/v1/tutorials/15",
+					"host": [
+						"{{ServerUrl}}"
+					],
+					"path": [
+						"v1",
+						"tutorials",
+						"15"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteTutorialById",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {},
+				"strictSSL": false
+			},
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Authorization}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{ServerUrl}}/v1/tutorials/15",
+					"host": [
+						"{{ServerUrl}}"
+					],
+					"path": [
+						"v1",
+						"tutorials",
+						"15"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "tutorialsList",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {},
+				"strictSSL": false
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Authorization}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{ServerUrl}}/v1/tutorials/",
+					"host": [
+						"{{ServerUrl}}"
+					],
+					"path": [
+						"v1",
+						"tutorials",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "tutorialsListSortById",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {},
+				"strictSSL": false
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Authorization}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{ServerUrl}}/v1/tutorials/?sort_by_field=id&sort_by=ASC",
+					"host": [
+						"{{ServerUrl}}"
+					],
+					"path": [
+						"v1",
+						"tutorials",
+						""
+					],
+					"query": [
+						{
+							"key": "sort_by_field",
+							"value": "id"
+						},
+						{
+							"key": "sort_by",
+							"value": "ASC"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "tutorialsListSortByTitle",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {},
+				"strictSSL": false
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Authorization}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{ServerUrl}}/v1/tutorials/?sort_by_field=title&sort_by=ASC",
+					"host": [
+						"{{ServerUrl}}"
+					],
+					"path": [
+						"v1",
+						"tutorials",
+						""
+					],
+					"query": [
+						{
+							"key": "sort_by_field",
+							"value": "title"
+						},
+						{
+							"key": "sort_by",
+							"value": "ASC"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "tutorialsListFilterByTitle",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {},
+				"strictSSL": false
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Authorization}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{ServerUrl}}/v1/tutorials/?filter_by_title=tutorial",
+					"host": [
+						"{{ServerUrl}}"
+					],
+					"path": [
+						"v1",
+						"tutorials",
+						""
+					],
+					"query": [
+						{
+							"key": "filter_by_title",
+							"value": "tutorial"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "tutorialsListFilterByDescription",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {},
+				"strictSSL": false
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Authorization}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{ServerUrl}}/v1/tutorials/?filter_by_description=description",
+					"host": [
+						"{{ServerUrl}}"
+					],
+					"path": [
+						"v1",
+						"tutorials",
+						""
+					],
+					"query": [
+						{
+							"key": "filter_by_description",
+							"value": "description"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateTutorial",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {},
+				"strictSSL": false
+			},
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Authorization}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\": \"Title 15 updated!\",\n    \"videoUrl\": \"https://www.youtube.com/watch?v=RscdU4Tc6Rc\",\n    \"description\": \"some description here <script>\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{ServerUrl}}/v1/tutorials/15",
+					"host": [
+						"{{ServerUrl}}"
+					],
+					"path": [
+						"v1",
+						"tutorials",
+						"15"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteAllTutorials",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {},
+				"strictSSL": false
+			},
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Authorization}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{ServerUrl}}/v1/tutorials/mass_delete",
+					"host": [
+						"{{ServerUrl}}"
+					],
+					"path": [
+						"v1",
+						"tutorials",
+						"mass_delete"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "notFoundEndpoint",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {},
+				"strictSSL": false
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Authorization}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{ServerUrl}}/v1/not-found-endpoint/",
+					"host": [
+						"{{ServerUrl}}"
+					],
+					"path": [
+						"v1",
+						"not-found-endpoint",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "ServerUrl",
+			"value": "localhost:3000",
+			"type": "string"
+		}
+	]
+}
