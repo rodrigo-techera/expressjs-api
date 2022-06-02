@@ -131,6 +131,7 @@ localhost:3000
 ## Available endpoints
 
 **Authenticate User** `POST /v1/auth`
+
 **_Payload_**
 
 |       Name | Required |  Type  | Description                  |
@@ -147,6 +148,7 @@ localhost:3000
 ```
 
 **Request Creation Token** `GET /v1/tutorials/token`
+
 **_Headers_**
 
 |            Name | Required |  Type  |          Value          | Description                                |
