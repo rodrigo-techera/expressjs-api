@@ -1,5 +1,6 @@
 const { dbConn } = require("../models");
 const jwt = require("jsonwebtoken");
+const { statusCodes } = require("../config/http-status");
 const dotenv = require("dotenv");
 dotenv.config();
 
@@ -32,14 +33,14 @@ exports.authenticate = (req, res) => {
         res.json({ accessToken });
       } else {
         //email or password didn't match
-        return res.status(401).send({
+        return res.status(statusCodes.UNAUTHORIZED).send({
           error: "Invalid credentials",
         });
       }
     });
   } else {
     //email or password empty
-    return res.status(401).send({
+    return res.status(statusCodes.UNPROCESSABLE_ENTITY).send({
       error: "Empty credentials",
     });
   }

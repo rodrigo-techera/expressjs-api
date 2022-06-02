@@ -4,6 +4,7 @@ const cors = require("cors");
 const authRouter = require("./routes/auth");
 const tutorialsRouter = require("./routes/tutorials");
 const { authenticateJWT } = require("./middlewares/authenticate-jwt");
+const { statusCodes } = require("./config/http-status");
 
 dotenv.config();
 const app = express();
@@ -29,7 +30,7 @@ app.use((err, req, res, next) => {
 
 //catch all wildcard to handle 404 on not found resources
 app.all("*", function (req, res) {
-  return res.status(404).send({
+  return res.status(statusCodes.NOT_FOUND).send({
     error: "Resource not found",
   });
 });

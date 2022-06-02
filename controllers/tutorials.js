@@ -2,6 +2,7 @@ const { dbConn } = require("../models");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 dotenv.config();
+const { statusCodes } = require("../config/http-status");
 
 const Op = dbConn.Sequelize.Op;
 const Tutorial = dbConn.tutorials;
@@ -53,8 +54,7 @@ exports.listAll = (req, res) => {
       res.send(data);
     })
     .catch((err) => {
-      return res.status(500).send({
-        // Server Error
+      return res.status(statusCodes.INTERNAL_SERVER_ERROR).send({
         error: "An error occurred listing Tutorials",
       });
     });
@@ -68,31 +68,19 @@ exports.listById = (req, res) => {
       if (data) {
         res.send(data);
       } else {
-        return res.status(404).send({
-          // Not Found
+        return res.status(statusCodes.NOT_FOUND).send({
           error: "Tutorial not found",
         });
       }
     })
     .catch((err) => {
-      return res.status(500).send({
-        // Server Error
+      return res.status(statusCodes.INTERNAL_SERVER_ERROR).send({
         error: "An error occurred retrieving Tutorial",
       });
     });
 };
 
 exports.create = (req, res) => {
-  // Validate request
-  if (!req.body.title) {
-    return res.status(400).send({
-      // Bad Request
-      error: "Content can not be empty!",
-    });
-
-    return;
-  }
-
   // "title" only is required here since that "publishedStatus" has a deafult value
   // encapsulating the values inside "data" object we prevent unexpected fields to be sent for creation
   const data = {
@@ -107,8 +95,7 @@ exports.create = (req, res) => {
       res.send(data);
     })
     .catch((err) => {
-      return res.status(500).send({
-        // Server Error
+      return res.status(statusCodes.INTERNAL_SERVER_ERROR).send({
         error: "An error ocurred while creating Tutorial",
       });
     });
@@ -137,28 +124,24 @@ exports.updateById = (req, res) => {
                 message: "Tutorial was updated successfully",
               });
             } else {
-              return res.status(500).send({
-                // Server Error
+              return res.status(statusCodes.INTERNAL_SERVER_ERROR).send({
                 error: "Tutorial was not updated",
               });
             }
           })
           .catch((err) => {
-            return res.status(500).send({
-              // Server Error
+            return res.status(statusCodes.INTERNAL_SERVER_ERROR).send({
               error: "An error ocurred while updating Tutorial",
             });
           });
       } else {
-        return res.status(404).send({
-          // Not Found
+        return res.status(statusCodes.NOT_FOUND).send({
           error: "Tutorial not found",
         });
       }
     })
     .catch((err) => {
-      return res.status(500).send({
-        // Server Error
+      return res.status(statusCodes.INTERNAL_SERVER_ERROR).send({
         error: "An error ocurred retrieving Tutorial",
       });
     });
@@ -182,28 +165,24 @@ exports.deleteById = (req, res) => {
                 message: "Tutorial was deleted successfully",
               });
             } else {
-              return res.status(500).send({
-                // Server Error
+              return res.status(statusCodes.INTERNAL_SERVER_ERROR).send({
                 error: "An error ocurred while deleting Tutorial",
               });
             }
           })
           .catch((err) => {
-            return res.status(500).send({
-              // Server Error
+            return res.status(statusCodes.INTERNAL_SERVER_ERROR).send({
               error: "An error ocurred while deleting Tutorial",
             });
           });
       } else {
-        return res.status(404).send({
-          // Not Found
+        return res.status(statusCodes.NOT_FOUND).send({
           error: "Tutorial not found",
         });
       }
     })
     .catch((err) => {
-      return res.status(500).send({
-        // Server Error
+      return res.status(statusCodes.INTERNAL_SERVER_ERROR).send({
         error: "An error occurred retrieving Tutorial",
       });
     });
@@ -217,15 +196,13 @@ exports.deleteAll = (req, res) => {
           message: "Tutorials were deleted successfully",
         });
       } else {
-        return res.status(500).send({
-          // Server Error
+        return res.status(statusCodes.INTERNAL_SERVER_ERROR).send({
           error: "An error ocurred while deleting Tutorials",
         });
       }
     })
     .catch((err) => {
-      return res.status(500).send({
-        // Server Error
+      return res.status(statusCodes.INTERNAL_SERVER_ERROR).send({
         error: "An error ocurred while deleting Tutorials",
       });
     });

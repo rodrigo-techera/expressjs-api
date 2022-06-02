@@ -3,6 +3,7 @@ const {
   customCreateTokenValidationJWT,
 } = require("./custom-create-token-validation");
 const { isValidHttpUrl } = require("../utils/checks");
+const { statusCodes } = require("../config/http-status");
 
 const ALLOWED_SORT_FIELDS = ["id", "title", "updatedAt"];
 const ALLOWED_SORT_VALUES = ["ASC", "DESC"];
@@ -12,8 +13,7 @@ const validateParams = (req, res, next) => {
 
   if (errors.errors.length > 0) {
     //validation errors ocurred
-    return res.status(400).send({
-      //bad Request
+    return res.status(statusCodes.UNPROCESSABLE_ENTITY).send({
       error: errors.errors[0].msg,
     });
   }
@@ -26,8 +26,7 @@ const isAdminRole = (req, res, next) => {
     return next();
   }
 
-  return res.status(401).send({
-    //Unauthorized
+  return res.status(statusCodes.UNAUTHORIZED).send({
     error: "invalid role",
   });
 };

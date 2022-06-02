@@ -1,6 +1,7 @@
-const dotenv = require("dotenv");
 const jwt = require("jsonwebtoken");
+const dotenv = require("dotenv");
 dotenv.config();
+const { statusCodes } = require("../config/http-status");
 
 exports.customCreateTokenValidationJWT = (req, res, next) => {
   const creationToken = req.headers["custom-authentication-token"];
@@ -10,8 +11,7 @@ exports.customCreateTokenValidationJWT = (req, res, next) => {
       process.env.ACCESS_TOKEN_SECRET,
       (error, user) => {
         if (error) {
-          return res.status(401).send({
-            //Unauthorized
+          return res.status(statusCodes.UNAUTHORIZED).send({
             error: "Invalid Creation Token",
           });
         }
@@ -23,8 +23,7 @@ exports.customCreateTokenValidationJWT = (req, res, next) => {
         const tokenTimestamp = user.timestamp;
 
         if (currentTimestamp - tokenTimestamp > allowedTimeDiff) {
-          return res.status(401).send({
-            //Unauthorized
+          return res.status(statusCodes.UNAUTHORIZED).send({
             error: "Creation Token expired",
           });
         }
@@ -33,8 +32,7 @@ exports.customCreateTokenValidationJWT = (req, res, next) => {
       }
     );
   } else {
-    return res.status(401).send({
-      //Unauthorized
+    return res.status(statusCodes.UNPROCESSABLE_ENTITY).send({
       error: "Creation Token missing",
     });
   }
