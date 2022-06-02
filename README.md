@@ -119,11 +119,11 @@ localhost:3000
 ## Packages Used
 
 - `bcrypt` => used to encrypt user password preventing to save plain text on the db
-- `cors` =>
+- `cors` => used as middleware to enable cors allowing api being consumed from a browser
 - `dotenv` => used to extract values from .env file
-- `express` => to handle api routes
-- `express-validator` => to sanitize and validate data as a middleware
-- `jsonwebtoken` to handle json web tokens
+- `express` => used to handle api routes
+- `express-validator` => used to sanitize and validate data as a middleware
+- `jsonwebtoken` used to handle json web tokens
 - `mysql2` => mysql driver to handle database connection
 - `sequelize` => ORM tool to handle models and CRUD actions
 
